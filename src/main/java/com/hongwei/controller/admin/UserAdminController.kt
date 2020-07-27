@@ -2,7 +2,6 @@ package com.hongwei.controller.admin
 
 import com.google.gson.Gson
 import com.hongwei.Constant
-import com.hongwei.model.contract.AddUserRequest
 import com.hongwei.model.contract.Roles
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.User
@@ -10,8 +9,13 @@ import com.hongwei.model.jpa.UserRepository
 import com.hongwei.model.soap.common.Response
 import com.hongwei.model.soap.common.SoapConstant.CODE_ERROR
 import com.hongwei.model.soap.common.SoapConstant.CODE_SUCCESS
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
@@ -25,11 +29,15 @@ class UserAdminController {
 
     private val tmpToken: String = getTmpToken()
 
+    private val logger: Logger = LoggerFactory.getLogger(UserAdminController::class.java)
+
     @RequestMapping(path = ["/test.do"])
     @ResponseBody
     fun test(): String {
         val userCount = userRepository.count()
         val guestCount = guestRepository.count()
+
+        logger.debug("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx userCount: $userCount, guestCount: $guestCount")
 
         val stringBuilder = StringBuilder("userCount: $userCount\nguestCount: $guestCount\n")
 
@@ -49,16 +57,18 @@ class UserAdminController {
     @RequestMapping(path = ["/addUser.do"])
     @ResponseBody
     fun addUser(args: String, token: String?, sign: String?): String {
-        val obj = Gson().fromJson(args, AddUserRequest::class.java)
-        userRepository.findByUserName(obj.userName)?.let {
-            return Gson().toJson(Response.from(CODE_ERROR, "user already exists!"))
-        }
-        userRepository.save(User().apply {
-            user_name = obj.userName
-            password_hash = obj.passwordHash
-            this.roles = roles
-            this.token = tmpToken
-        })
+
+
+//        val obj = Gson().fromJson(args, AddUserRequest::class.java)
+//        userRepository.findByUserName(obj.userName)?.let {
+//            return Gson().toJson(Response.from(CODE_ERROR, "user already exists!"))
+//        }
+//        userRepository.save(User().apply {
+//            user_name = obj.userName
+//            password_hash = obj.passwordHash
+//            this.roles = roles
+//            this.token = tmpToken
+//        })
         return Gson().toJson(Response.from(CODE_SUCCESS, "user create succeed."))
     }
 
