@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 class UserAdminController {
     @Autowired
     private lateinit var userRepository: UserRepository
+
     @Autowired
     private lateinit var guestRepository: GuestRepository
 
@@ -36,8 +37,6 @@ class UserAdminController {
     fun test(): String {
         val userCount = userRepository.count()
         val guestCount = guestRepository.count()
-
-        logger.debug("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx userCount: $userCount, guestCount: $guestCount")
 
         val stringBuilder = StringBuilder("userCount: $userCount\nguestCount: $guestCount\n")
 
@@ -57,7 +56,7 @@ class UserAdminController {
     @RequestMapping(path = ["/addUser.do"])
     @ResponseBody
     fun addUser(args: String, token: String?, sign: String?): String {
-
+        logger.info("addUser args: $args, token: $token, sign: $sign")
 
 //        val obj = Gson().fromJson(args, AddUserRequest::class.java)
 //        userRepository.findByUserName(obj.userName)?.let {

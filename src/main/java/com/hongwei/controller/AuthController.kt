@@ -2,15 +2,22 @@ package com.hongwei.controller
 
 import com.google.gson.Gson
 import com.hongwei.Constant
+import com.hongwei.model.contract.LoginRequest
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.User
 import com.hongwei.model.jpa.UserRepository
 import com.hongwei.model.soap.common.Response
 import com.hongwei.model.soap.common.SoapConstant.AUTH_FAILURE
 import com.hongwei.model.soap.common.SoapConstant.CODE_ERROR
+import com.hongwei.model.soap.common.SoapConstant.CODE_LOGIN_FAILURE
 import com.hongwei.model.soap.common.SoapConstant.CODE_SUCCESS
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 
 @RestController
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.*
 class AuthController {
     @Autowired
     private lateinit var userRepository: UserRepository
+
     @Autowired
     private lateinit var guestRepository: GuestRepository
 
@@ -26,15 +34,15 @@ class AuthController {
 
     @RequestMapping(path = ["/login.do"])
     @ResponseBody
-    fun login(userName: String, passwordHash: String, sign: String?): String {
+    fun login(@RequestParam userName: String, @RequestParam passwordHash: String, @RequestParam sign: String?): String {
         val user = userRepository.findByUserName(userName)
-                ?: return Gson().toJson(Response.from(CODE_ERROR, "user not exist"))
+                ?: return Gson().toJson(Response.from(CODE_LOGIN_FAILURE, "User not exist."))
 
         if (passwordHash != user.password_hash) {
-            return Gson().toJson(Response.from(CODE_ERROR, "wrong password"))
+            return Gson().toJson(Response.from(CODE_LOGIN_FAILURE, "Login failed!"))
         }
 
-        return Gson().toJson(Response.from(CODE_SUCCESS, "login success", user))
+        return Gson().toJson(Response.from(CODE_SUCCESS, "Login success", user))
     }
 
     @RequestMapping(path = ["/guestLogin.do"])

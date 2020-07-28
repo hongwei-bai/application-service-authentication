@@ -15,9 +15,12 @@ object SoapConstant {
 
     //    4	4xx: Client Error
     //    It means the request contains incorrect syntax or cannot be fulfilled.
+    const val CODE_LOGIN_FAILURE = 401
 
     //    5	5xx: Server Error
     //    It means the server failed to fulfill an apparently valid request.
     const val UNKNOWN_SERVER_ERROR = 500
     const val AUTH_FAILURE = 501
+
+
 }
