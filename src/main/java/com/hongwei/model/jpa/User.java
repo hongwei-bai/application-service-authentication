@@ -1,9 +1,6 @@
 package com.hongwei.model.jpa;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -21,6 +18,10 @@ public class User {
     @Column(nullable = false)
     private String token;
 
+    @Column(nullable = false)
+    private String preferred_language;
+
+    @Lob
     @Column(nullable = false)
     private String roles;
 
