@@ -17,15 +17,9 @@ public class Guest {
     @Column(nullable = false)
     private String guest_code;
 
-    @Column(nullable = false)
-    private String token;
-
-    @Column(nullable = false)
-    private String preferred_language;
-    
     @Lob
     @Column(nullable = false)
-    private String roles;
+    private String preference_json;
 
     public Guest() {
     }
@@ -46,27 +40,19 @@ public class Guest {
         this.guest_code = guest_code;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPreference_json() {
+        return preference_json;
+    }
+
+    public void setPreference_json(String preference_json) {
+        this.preference_json = preference_json;
     }
 }

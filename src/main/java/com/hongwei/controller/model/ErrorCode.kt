@@ -1,6 +1,6 @@
-package com.hongwei.model.soap.common
+package com.hongwei.controller.model
 
-object SoapConstant {
+object ErrorCode {
     const val CODE_ERROR = 1
 
     //    1xx: Informational

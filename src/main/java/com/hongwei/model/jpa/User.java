@@ -16,14 +16,11 @@ public class User {
     private String password_hash;
 
     @Column(nullable = false)
-    private String token;
-
-    @Column(nullable = false)
-    private String preferred_language;
+    private String role;
 
     @Lob
     @Column(nullable = false)
-    private String roles;
+    private String preference_json;
 
     public User() {
     }
@@ -44,19 +41,19 @@ public class User {
         this.password_hash = password_hash;
     }
 
-    public String getToken() {
-        return token;
+    public String getRole() {
+        return role;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getRoles() {
-        return roles;
+    public String getPreference_json() {
+        return preference_json;
     }
 
-    public void setRoles(String roles) {
-        this.roles = roles;
+    public void setPreference_json(String preference_json) {
+        this.preference_json = preference_json;
     }
 }

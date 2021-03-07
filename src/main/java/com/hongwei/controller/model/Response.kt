@@ -1,7 +1,7 @@
-package com.hongwei.model.soap.common
+package com.hongwei.controller.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.hongwei.model.soap.common.SoapConstant.CODE_SUCCESS
+import com.hongwei.controller.model.ErrorCode.CODE_SUCCESS
 import java.io.Serializable
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -17,10 +17,6 @@ class Response<T>(
 
         fun from(code: Int, msg: String): Response<*> {
             return Response<Any?>(code, msg, null)
-        }
-
-        fun from(code: Int, msg: String, data: Any): Response<*> {
-            return Response<Any?>(code, msg, data)
         }
     }
 }
