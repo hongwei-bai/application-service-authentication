@@ -38,7 +38,7 @@ public class User {
     }
 
     public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
+        this.password_hash = password_hash.toLowerCase();
     }
 
     public String getRole() {

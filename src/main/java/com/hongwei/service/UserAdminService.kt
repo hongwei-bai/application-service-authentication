@@ -1,13 +1,12 @@
 package com.hongwei.service
 
+import com.hongwei.constants.Conflict
+import com.hongwei.constants.NotFound
 import com.hongwei.controller.admin.UserAdminController
 import com.hongwei.model.contract.Role
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.User
 import com.hongwei.model.jpa.UserRepository
-import com.hongwei.service.model.Failure
-import com.hongwei.service.model.ServiceResult
-import com.hongwei.service.model.Success
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,30 +41,26 @@ class UserAdminService {
         return stringBuilder.toString()
     }
 
-    fun addUser(userName: String, passwordHash: String, role: Role): ServiceResult {
+    fun addUser(userName: String, passwordHash: String, role: Role) {
         userRepository.findByUserName(userName)?.let {
-            return Failure("user already exists")
+            throw Conflict
         }
         userRepository.save(User().apply {
             user_name = userName
             password_hash = passwordHash
             this.role = role.name
+            preference_json = "{}"
         })
-        return Success<Any>()
     }
 
-    fun deleteUser(userName: String): ServiceResult {
-        userRepository.findByUserName(userName)
-                ?: return Failure("User does not exist")
+    fun deleteUser(userName: String) {
+        userRepository.findByUserName(userName) ?: throw NotFound
         userRepository.deleteByUserName(userName)
-        return Success<Any>()
     }
 
-    fun getUsers(role: Role? = null): ServiceResult {
+    fun getUsers(role: Role? = null): List<User> {
         if (role != null) {
-            return userRepository.findUsersByRole(role.name)?.let {
-                Success(it)
-            } ?: Failure("No user acting role ${role.name}")
+            return userRepository.findUsersByRole(role.name)
         }
 
         val list = mutableListOf<User>()
@@ -75,21 +70,16 @@ class UserAdminService {
         userRepository.findUsersByRole(Role.user.name)?.let {
             list.addAll(it)
         }
-        return Success(list)
+        return list
     }
 
-    fun getUser(userName: String): ServiceResult =
-            userRepository.findByUserName(userName)?.let {
-                Success(it)
-            } ?: Failure("User does not exist")
+    fun getUser(userName: String): User = userRepository.findByUserName(userName) ?: throw NotFound
 
-    fun updateUser(userName: String, role: String?, passwordHash: String?): ServiceResult {
-        val user = userRepository.findByUserName(userName)
-                ?: return Failure("User does not exist")
+    fun updateUser(userName: String, role: String?, passwordHash: String?) {
+        val user = userRepository.findByUserName(userName) ?: throw NotFound
         userRepository.save(user.apply {
             role?.let { this.role = role }
             passwordHash?.let { password_hash = passwordHash }
         })
-        return Success<Any>()
     }
 }

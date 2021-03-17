@@ -1,6 +1,5 @@
-package com.hongwei.encrypt
+package com.hongwei.security.util
 
-import com.hongwei.encrypt.util.SaltUtils
 import java.util.*
 
 object TokenGenerator {

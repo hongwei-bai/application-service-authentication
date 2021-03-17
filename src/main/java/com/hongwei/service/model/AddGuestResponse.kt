@@ -1,5 +1,5 @@
 package com.hongwei.service.model
 
-data class AddGuestResponseBody(
+data class AddGuestResponse(
         val guestCode: String
 )

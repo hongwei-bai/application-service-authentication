@@ -1,6 +1,7 @@
 package com.hongwei.security.model
 
 data class AuthenticationRequest(
-        val username: String,
-        val password: String
+        val guestCode: String?,
+        val userName: String?,
+        val credential: String? // password hash
 )

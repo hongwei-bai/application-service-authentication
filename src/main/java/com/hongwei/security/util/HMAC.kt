@@ -1,4 +1,4 @@
-package com.hongwei.encrypt.util
+package com.hongwei.security.util
 
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec

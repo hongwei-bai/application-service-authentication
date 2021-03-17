@@ -1,6 +1,8 @@
 package com.hongwei.security
 
+import com.hongwei.constants.Constants.Security.AUTHENTICATE_PATH
 import com.hongwei.security.filters.JwtRequestFilter
+import com.hongwei.service.LoginUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.security.authentication.AuthenticationManager
@@ -16,13 +18,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 open class SecurityConfigurer : WebSecurityConfigurerAdapter() {
     @Autowired
-    private lateinit var myUserDetailsService: MyUserDetailsService
+    private lateinit var loginUserDetailsService: LoginUserDetailsService
 
     @Autowired
     private val jwtRequestFilter: JwtRequestFilter? = null
 
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.userDetailsService(myUserDetailsService)
+        auth.userDetailsService(loginUserDetailsService)
     }
 
     @Bean
@@ -36,7 +38,7 @@ open class SecurityConfigurer : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("/authenticate").permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
+                .authorizeRequests().antMatchers(AUTHENTICATE_PATH).permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
     }

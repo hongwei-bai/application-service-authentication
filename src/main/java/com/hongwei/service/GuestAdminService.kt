@@ -1,12 +1,10 @@
 package com.hongwei.service
 
+import com.hongwei.constants.NotFound
 import com.hongwei.model.jpa.Guest
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.service.helper.GuestCodeGenerator
-import com.hongwei.service.model.AddGuestResponseBody
-import com.hongwei.service.model.Failure
-import com.hongwei.service.model.ServiceResult
-import com.hongwei.service.model.Success
+import com.hongwei.service.model.AddGuestResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -15,7 +13,7 @@ class GuestAdminService {
     @Autowired
     private lateinit var guestRepository: GuestRepository
 
-    fun addGuest(description: String, expireTime: Long): ServiceResult {
+    fun addGuest(description: String, expireTime: Long): AddGuestResponse {
         var guestCode = GuestCodeGenerator.generate()
         while (guestRepository.findByGuestCode(guestCode) != null) {
             guestCode = GuestCodeGenerator.generate()
@@ -26,26 +24,23 @@ class GuestAdminService {
             expire_time = expireTime
         }
         guestRepository.save(guest)
-        return Success(AddGuestResponseBody(guestCode))
+        return AddGuestResponse(guestCode)
     }
 
-    fun deleteGuest(guestCode: String): ServiceResult {
-        guestRepository.findByGuestCode(guestCode) ?: return Failure("Guest code does not exist")
+    fun deleteGuest(guestCode: String) {
+        guestRepository.findByGuestCode(guestCode) ?: throw NotFound
         guestRepository.deleteByGuestCode(guestCode)
-        return Success<Any>()
     }
 
-    fun getGuest(guestCode: String): ServiceResult =
-            guestRepository.findByGuestCode(guestCode)?.let {
-                Success(it)
-            } ?: Failure("Guest code does not exist")
+    fun getGuest(guestCode: String): Guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
 
-    fun updateGuest(guestCode: String, newDescription: String?, newExpireTime: Long?): ServiceResult {
-        val guest = guestRepository.findByGuestCode(guestCode) ?: return Failure("Guest code does not exist")
+    fun getAllGuests(guestCode: String): List<Guest> = guestRepository.findAllGuest() ?: throw NotFound
+
+    fun updateGuest(guestCode: String, newDescription: String?, newExpireTime: Long?) {
+        val guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
         guestRepository.save(guest.apply {
             newExpireTime?.let { this.expire_time = newExpireTime }
             newDescription?.let { this.description = newDescription }
         })
-        return Success<Any>()
     }
 }

@@ -1,5 +1,6 @@
 package com.hongwei.security
 
+import com.hongwei.constants.Constants.Security.SECRET_KEY
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -10,15 +11,6 @@ import java.util.function.Function
 
 @Service
 class JwtUtil {
-    companion object {
-        private val SECRET_KEY = "secret"
-
-        private val SECOND = 1000L
-        private val MINUTE = 60000
-        private val HOUR = 3600000
-        private val DAY = HOUR * 24
-    }
-
     fun extractUsername(token: String?): String {
         return extractClaim(token, Function { obj: Claims -> obj.subject })
     }
@@ -40,14 +32,14 @@ class JwtUtil {
         return extractExpiration(token).before(Date())
     }
 
-    fun generateToken(userDetails: UserDetails): String {
+    fun generateToken(userDetails: UserDetails, expiration: Long): String {
         val claims: Map<String, Any> = HashMap()
-        return createToken(claims, userDetails.username)
+        return createToken(claims, userDetails.username, expiration)
     }
 
-    private fun createToken(claims: Map<String, Any>, subject: String): String {
+    private fun createToken(claims: Map<String, Any>, subject: String, expiration: Long): String {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(Date(System.currentTimeMillis()))
-                .setExpiration(Date(System.currentTimeMillis() + DAY * 60L))
+                .setExpiration(Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact()
     }
 

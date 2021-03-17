@@ -5,3 +5,5 @@ spring.datasource.password=xxx
 spring.datasource.driver-class-name=com.mysql.jdbc.Driver
 
 spring.jpa.properties.hibernate.hbm2ddl.auto=update
+
+server.error.include-message=always
