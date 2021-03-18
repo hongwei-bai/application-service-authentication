@@ -38,7 +38,7 @@ open class SecurityConfigurer : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers(AUTHENTICATE_PATH).permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
+                .authorizeRequests().antMatchers(AUTHENTICATE_PATH, "/index.do").permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
     }

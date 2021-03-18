@@ -27,17 +27,8 @@ class LoginUserDetailsService : UserDetailsService {
             if (userName.startsWith(GUEST_PREFIX)) {
                 loadGuest(userName)
             } else {
-                bypassTmp(userName)
+                loadUser(userName)
             }
-
-    //TODO to remove
-    private fun bypassTmp(userName: String): UserDetails {
-        if (userName == "baihongwei") {
-            return User("baihongwei", "666", emptyList())
-        } else {
-            return loadUser(userName)
-        }
-    }
 
     private fun loadUser(userName: String): UserDetails =
             userRepository.findByUserName(userName)?.run {
