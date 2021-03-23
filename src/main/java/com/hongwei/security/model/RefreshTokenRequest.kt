@@ -1,6 +1,5 @@
 package com.hongwei.security.model
 
-data class AuthenticationResponse(
-        val token: String,
+data class RefreshTokenRequest(
         val refreshToken: String
 )

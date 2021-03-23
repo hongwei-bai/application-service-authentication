@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
-class LoginUserDetailsService : UserDetailsService {
-    private val logger: Logger = LogManager.getLogger(LoginUserDetailsService::class.java)
+class AuthenticateUserDetailsService : UserDetailsService {
+    private val logger: Logger = LogManager.getLogger(AuthenticateUserDetailsService::class.java)
 
     @Autowired
     private lateinit var userRepository: UserRepository

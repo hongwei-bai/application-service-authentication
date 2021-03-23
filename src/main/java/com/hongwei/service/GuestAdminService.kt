@@ -1,6 +1,7 @@
 package com.hongwei.service
 
 import com.hongwei.constants.NotFound
+import com.hongwei.constants.SecurityConfigurations
 import com.hongwei.model.jpa.Guest
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.service.helper.GuestCodeGenerator
@@ -13,10 +14,13 @@ class GuestAdminService {
     @Autowired
     private lateinit var guestRepository: GuestRepository
 
+    @Autowired
+    private lateinit var securityConfigurations: SecurityConfigurations
+
     fun addGuest(description: String, expireTime: Long): AddGuestResponse {
-        var guestCode = GuestCodeGenerator.generate()
+        var guestCode = GuestCodeGenerator.generate(securityConfigurations.guestCodeLength)
         while (guestRepository.findByGuestCode(guestCode) != null) {
-            guestCode = GuestCodeGenerator.generate()
+            guestCode = GuestCodeGenerator.generate(securityConfigurations.guestCodeLength)
         }
         val guest = Guest().apply {
             this.description = description

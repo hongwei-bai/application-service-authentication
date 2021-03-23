@@ -1,9 +1,10 @@
 package com.hongwei.security
 
-import com.hongwei.constants.Constants.Security.SECRET_KEY
+import com.hongwei.constants.SecurityConfigurations
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.*
@@ -11,6 +12,9 @@ import java.util.function.Function
 
 @Service
 class JwtUtil {
+    @Autowired
+    private lateinit var securityConfigurations: SecurityConfigurations
+
     fun extractUsername(token: String?): String {
         return extractClaim(token, Function { obj: Claims -> obj.subject })
     }
@@ -25,7 +29,7 @@ class JwtUtil {
     }
 
     private fun extractAllClaims(token: String?): Claims {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).body
+        return Jwts.parser().setSigningKey(securityConfigurations.secret).parseClaimsJws(token).body
     }
 
     private fun isTokenExpired(token: String?): Boolean? {
@@ -40,10 +44,10 @@ class JwtUtil {
     private fun createToken(claims: Map<String, Any>, subject: String, expiration: Long): String {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(Date(System.currentTimeMillis()))
                 .setExpiration(Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact()
+                .signWith(SignatureAlgorithm.HS256, securityConfigurations.secret).compact()
     }
 
-    fun validateToken(token: String?, userDetails: UserDetails): Boolean? {
+    fun validateToken(token: String?, userDetails: UserDetails): Boolean {
         val username = extractUsername(token)
         return username == userDetails.username && !isTokenExpired(token)!!
     }

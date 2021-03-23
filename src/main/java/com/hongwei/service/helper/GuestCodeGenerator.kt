@@ -1,13 +1,11 @@
 package com.hongwei.service.helper
 
-import com.hongwei.constants.Constants.Guest.GUEST_CODE_DEFAULT_LENGTH
 import com.hongwei.constants.Constants.Guest.GUEST_CODE_TABLE
-import java.lang.StringBuilder
 import kotlin.random.Random
 
 object GuestCodeGenerator {
     @JvmStatic
-    fun generate(length: Int = GUEST_CODE_DEFAULT_LENGTH): String {
+    fun generate(length: Int): String {
         var seed = (length + System.currentTimeMillis()) % 1000
         val stringBuilder = StringBuilder()
         for (i in 0 until length) {

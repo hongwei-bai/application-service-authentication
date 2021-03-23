@@ -1,7 +1,8 @@
 package com.hongwei.security.filters;
 
+import com.hongwei.constants.SecurityConfigurations;
 import com.hongwei.security.JwtUtil;
-import com.hongwei.service.LoginUserDetailsService;
+import com.hongwei.service.AuthenticateUserDetailsService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,29 +19,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.hongwei.constants.Constants.Security.AUTHORIZATION_BEARER;
-import static com.hongwei.constants.Constants.Security.AUTHORIZATION_HEADER;
-
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     private Logger logger = LogManager.getLogger(JwtRequestFilter.class);
 
     @Autowired
-    private LoginUserDetailsService userDetailsService;
+    private AuthenticateUserDetailsService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private SecurityConfigurations securityConfigurations;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        final String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
+        final String authorizationHeader = request.getHeader(securityConfigurations.authorizationHeader);
 
         String username = null;
         String jwt = null;
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(AUTHORIZATION_BEARER)) {
+        if (authorizationHeader != null && authorizationHeader.startsWith(securityConfigurations.authorizationBearer)) {
             jwt = authorizationHeader.substring(7);
             username = jwtUtil.extractUsername(jwt);
         }

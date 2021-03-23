@@ -1,8 +1,7 @@
 package com.hongwei.controller
 
-import com.hongwei.constants.Constants.Security.AUTHENTICATE_PATH
+import com.hongwei.constants.Constants.Security.LOGIN_PATH
 import com.hongwei.security.model.AuthenticationRequest
-import com.hongwei.service.LoginService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 class LoginController {
     @Autowired
-    private lateinit var loginService: LoginService
+    private lateinit var authenticateController: AuthenticateController
 
-    @RequestMapping(value = [AUTHENTICATE_PATH], method = [RequestMethod.POST])
+    @RequestMapping(value = [LOGIN_PATH], method = [RequestMethod.POST])
     @ResponseBody
     fun login(@RequestBody authenticationRequest: AuthenticationRequest): ResponseEntity<*> =
-            ResponseEntity.ok(loginService.authenticate(authenticationRequest))
+            authenticateController.authenticate(authenticationRequest)
 }
