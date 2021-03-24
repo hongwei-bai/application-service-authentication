@@ -1,9 +1,5 @@
 package com.hongwei.security
 
-import com.hongwei.constants.Constants.Security.AUTHENTICATE_PATH
-import com.hongwei.constants.Constants.Security.INDEX_ALIAS
-import com.hongwei.constants.Constants.Security.INDEX_PATH
-import com.hongwei.constants.Constants.Security.REFRESH_TOKEN_PATH
 import com.hongwei.security.filters.JwtRequestFilter
 import com.hongwei.service.AuthenticateUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
@@ -41,11 +37,7 @@ open class SecurityConfigurer : WebSecurityConfigurerAdapter() {
     @Throws(Exception::class)
     override fun configure(httpSecurity: HttpSecurity) {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers(
-                        AUTHENTICATE_PATH,
-                        REFRESH_TOKEN_PATH,
-                        INDEX_PATH, INDEX_ALIAS
-                )
+                .authorizeRequests().antMatchers("/authenticate/*.do", "/index.do", "/")
                 .permitAll().anyRequest().authenticated().and().exceptionHandling().and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)

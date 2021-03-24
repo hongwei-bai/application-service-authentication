@@ -8,6 +8,7 @@ import kotlin.properties.Delegates
 @ConfigurationProperties(prefix = "jwt")
 open class SecurityConfigurations {
     lateinit var secret: String
+    lateinit var secretRefresh: String
     lateinit var authorizationHeader: String
     lateinit var authorizationBearer: String
     var tokenExpirationMin by Delegates.notNull<Long>()

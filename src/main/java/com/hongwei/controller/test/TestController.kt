@@ -1,7 +1,5 @@
 package com.hongwei.controller.test
 
-import com.hongwei.constants.Constants.Security.INDEX_ALIAS
-import com.hongwei.constants.Constants.Security.INDEX_PATH
 import org.apache.log4j.LogManager
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Value
@@ -18,11 +16,17 @@ class TestController {
     @Value("\${spring.jmx.default-domain}")
     private lateinit var applicationDomain: String
 
-    @RequestMapping(path = [INDEX_PATH, INDEX_ALIAS])
+    @RequestMapping(path = ["/index.do", "/"])
     @ResponseBody
     fun index(): String {
         logger.debug("Hello debug")
 
         return "Hello Hongwei! Welcome to $applicationDomain"
+    }
+
+    @RequestMapping(path = ["/testAuthorise.do"])
+    @ResponseBody
+    fun testAuthorise(): String {
+        return "Hello Hongwei! Authorisation test success! Your token is validated!"
     }
 }

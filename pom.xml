@@ -8,7 +8,6 @@
     <artifactId>application-service-authentication</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-<!--    <packaging>war</packaging>-->
     <name>application-service-authentication</name>
     <description>application-service-authentication</description>
 

@@ -1,17 +1,15 @@
 package com.hongwei.service
 
-import com.hongwei.constants.BadRequest
+import com.hongwei.constants.*
 import com.hongwei.constants.Constants.Guest.GUEST_PASS
 import com.hongwei.constants.Constants.TimeSpan.DAY
 import com.hongwei.constants.Constants.TimeSpan.MINUTE
-import com.hongwei.constants.SecurityConfigurations
-import com.hongwei.constants.Unauthorized
 import com.hongwei.model.contract.Role
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.UserRepository
-import com.hongwei.security.JwtUtil
+import com.hongwei.security.AccessTokenService
+import com.hongwei.security.RefreshTokenService
 import com.hongwei.security.model.*
-import com.hongwei.util.isGuest
 import org.apache.log4j.LogManager
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -34,7 +32,10 @@ class AuthenticateService {
     private lateinit var userDetailsService: UserDetailsService
 
     @Autowired
-    private lateinit var jwtUtil: JwtUtil
+    private lateinit var accessTokenService: AccessTokenService
+
+    @Autowired
+    private lateinit var refreshTokenService: RefreshTokenService
 
     @Autowired
     private lateinit var userRepository: UserRepository
@@ -46,19 +47,21 @@ class AuthenticateService {
     private lateinit var securityConfigurations: SecurityConfigurations
 
     fun authorise(authorisationRequest: AuthorisationRequest): AuthorisationResponse {
-        val username = jwtUtil.extractUsername(authorisationRequest.token)
+        val username = accessTokenService.extractUsername(authorisationRequest.accessToken)
         val userDetails = userDetailsService.loadUserByUsername(username)
-        if (jwtUtil.validateToken(authorisationRequest.token, userDetails)) {
-            val role: String
-            val preferenceJson: String
+        if (accessTokenService.validateToken(authorisationRequest.accessToken, userDetails)) {
+            var role = ""
+            var preferenceJson = ""
             if (isGuest(username)) {
                 role = Role.guest.toString()
-                val guest = guestRepository.findByGuestCode(username)
-                preferenceJson = guest.preference_json
+                guestRepository.findByGuestCode(username)?.let { guest ->
+                    preferenceJson = guest.preference_json!!
+                } ?: throw NotFound
             } else {
-                val user = userRepository.findByUserName(username)
-                role = user.role
-                preferenceJson = user.preference_json
+                userRepository.findByUserName(username)?.let { user ->
+                    role = user.role!!
+                    preferenceJson = user.preference_json!!
+                } ?: throw NotFound
             }
             return AuthorisationResponse(
                     validated = true,
@@ -71,11 +74,11 @@ class AuthenticateService {
     }
 
     fun refreshToken(refreshTokenRequest: RefreshTokenRequest): RefreshTokenResponse {
-        val username = jwtUtil.extractUsername(refreshTokenRequest.refreshToken)
+        val username = refreshTokenService.extractUsername(refreshTokenRequest.refreshToken)
         val userDetails = userDetailsService.loadUserByUsername(username)
-        if (jwtUtil.validateToken(refreshTokenRequest.refreshToken, userDetails)) {
+        if (refreshTokenService.validateToken(refreshTokenRequest.refreshToken, userDetails)) {
             return RefreshTokenResponse(
-                    jwtUtil.generateToken(userDetails, securityConfigurations.tokenExpirationMin * MINUTE)
+                    accessTokenService.generateToken(userDetails, securityConfigurations.tokenExpirationMin * MINUTE)
             )
         }
         throw Unauthorized
@@ -105,8 +108,8 @@ class AuthenticateService {
         }
 
         val expiration = if (isGuest(user)) {
-            val guest = guestRepository.findByGuestCode(user)
-            val left = guest.expire_time - System.currentTimeMillis()
+            val guest = guestRepository.findByGuestCode(user) ?: throw NotFound
+            val left = guest.expire_time!! - System.currentTimeMillis()
             logger.debug("left: $left")
             if (left < 0) {
                 throw Unauthorized
@@ -117,8 +120,10 @@ class AuthenticateService {
         }
 
         val userDetails: UserDetails = userDetailsService.loadUserByUsername(user)
-        val refreshToken = jwtUtil.generateToken(userDetails, expiration)
-        val token = jwtUtil.generateToken(userDetails, securityConfigurations.tokenExpirationMin * MINUTE)
+        val refreshToken = refreshTokenService.generateToken(userDetails, expiration)
+        val token = accessTokenService.generateToken(userDetails, securityConfigurations.tokenExpirationMin * MINUTE)
         return AuthenticationResponse(token, refreshToken)
     }
+
+    private fun isGuest(user: String) = user.startsWith(Constants.Guest.GUEST_PREFIX, false)
 }

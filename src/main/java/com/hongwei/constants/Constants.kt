@@ -3,12 +3,7 @@ package com.hongwei.constants
 object Constants {
     object Security {
         const val SALT_CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+"
-
-        const val LOGIN_PATH = "/login.do"
-        const val AUTHENTICATE_PATH = "/authenticate.do"
-        const val REFRESH_TOKEN_PATH = "/refresh_token.do"
-        const val INDEX_PATH = "/index.do"
-        const val INDEX_ALIAS = "/"
+        const val AUTHENTICATE_PATH = "/authenticate"
     }
 
     object Guest {

@@ -32,7 +32,7 @@ class AuthenticateUserDetailsService : UserDetailsService {
 
     private fun loadUser(userName: String): UserDetails =
             userRepository.findByUserName(userName)?.run {
-                User(user_name, password_hash, emptyList())
+                User(user_name, password_hash?.toLowerCase(), emptyList())
             } ?: throw Unauthorized
 
     private fun loadGuest(user: String): UserDetails =

@@ -1,4 +1,4 @@
-package com.hongwei.model.contract
+package com.hongwei.service.model
 
 data class AddUserRequest(
         val userName: String,

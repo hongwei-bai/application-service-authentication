@@ -1,6 +1,6 @@
 package com.hongwei.controller.admin
 
-import com.hongwei.model.contract.AddUserRequest
+import com.hongwei.service.model.AddUserRequest
 import com.hongwei.model.contract.Role
 import com.hongwei.service.UserAdminService
 import org.springframework.beans.factory.annotation.Autowired
