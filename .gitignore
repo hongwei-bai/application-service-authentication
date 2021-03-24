@@ -25,7 +25,5 @@ hs_err_pid*
 # project
 logs/
 target/
-src/main/resources/auth.yaml
 src/main/resources/application.properties
-src/main/resources/application.yml
 .idea/compiler.xml
