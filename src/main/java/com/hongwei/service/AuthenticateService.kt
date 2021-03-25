@@ -55,12 +55,12 @@ class AuthenticateService {
             if (isGuest(username)) {
                 role = Role.guest.toString()
                 guestRepository.findByGuestCode(username)?.let { guest ->
-                    preferenceJson = guest.preference_json!!
+                    preferenceJson = guest.preferenceJson
                 } ?: throw NotFound
             } else {
                 userRepository.findByUserName(username)?.let { user ->
-                    role = user.role!!
-                    preferenceJson = user.preference_json!!
+                    role = user.role
+                    preferenceJson = user.preferenceJson
                 } ?: throw NotFound
             }
             return AuthorisationResponse(
@@ -109,7 +109,7 @@ class AuthenticateService {
 
         val expiration = if (isGuest(user)) {
             val guest = guestRepository.findByGuestCode(user) ?: throw NotFound
-            val left = guest.expire_time!! - System.currentTimeMillis()
+            val left = guest.expireTime - System.currentTimeMillis()
             logger.debug("left: $left")
             if (left < 0) {
                 throw Unauthorized

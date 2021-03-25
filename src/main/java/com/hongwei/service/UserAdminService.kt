@@ -30,12 +30,12 @@ class UserAdminService {
 
         stringBuilder.append("table User: id |  user_name | password_hash\n")
         userRepository.findAll().forEachIndexed { index, user ->
-            stringBuilder.append(" $index | ${user.user_name} | ${user.password_hash}\n")
+            stringBuilder.append(" $index | ${user.userName} | ${user.credential}\n")
         }
 
         stringBuilder.append("table Guest: id |  guest_code | expire_time\n")
         guestRepository.findAll().forEachIndexed { index, guest ->
-            stringBuilder.append(" $index | ${guest.guest_code} | ${guest.expire_time}\n")
+            stringBuilder.append(" $index | ${guest.guestCode} | ${guest.expireTime}\n")
         }
 
         return stringBuilder.toString()
@@ -46,10 +46,9 @@ class UserAdminService {
             throw Conflict
         }
         userRepository.save(User().apply {
-            user_name = userName
-            password_hash = passwordHash
+            this.userName = userName
+            this.credential = passwordHash
             this.role = role.name
-            preference_json = "{}"
         })
     }
 
@@ -79,7 +78,7 @@ class UserAdminService {
         val user = userRepository.findByUserName(userName) ?: throw NotFound
         userRepository.save(user.apply {
             role?.let { this.role = role }
-            passwordHash?.let { password_hash = passwordHash }
+            passwordHash?.let { credential = passwordHash }
         })
     }
 }

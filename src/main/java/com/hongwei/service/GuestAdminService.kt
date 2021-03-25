@@ -24,8 +24,8 @@ class GuestAdminService {
         }
         val guest = Guest().apply {
             this.description = description
-            guest_code = guestCode
-            expire_time = expireTime
+            this.guestCode = guestCode
+            this.expireTime = expireTime
         }
         guestRepository.save(guest)
         return AddGuestResponse(guestCode)
@@ -43,7 +43,7 @@ class GuestAdminService {
     fun updateGuest(guestCode: String, newDescription: String?, newExpireTime: Long?) {
         val guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
         guestRepository.save(guest.apply {
-            newExpireTime?.let { this.expire_time = newExpireTime }
+            newExpireTime?.let { this.expireTime = newExpireTime }
             newDescription?.let { this.description = newDescription }
         })
     }

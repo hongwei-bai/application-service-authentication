@@ -17,9 +17,9 @@ class RegisterService {
             return throw Conflict
         }
         val user = User().apply {
-            user_name = userName
-            password_hash = passwordHash
-            role = Role.user.name
+            this.userName = userName
+            this.credential = passwordHash
+            this.role = Role.user.name
         }
         userRepository.save(user)
     }
