@@ -122,7 +122,23 @@ class AuthenticateService {
         val userDetails: UserDetails = userDetailsService.loadUserByUsername(user)
         val refreshToken = refreshTokenService.generateToken(userDetails, expiration)
         val token = accessTokenService.generateToken(userDetails, securityConfigurations.tokenExpirationMin * MINUTE)
-        return AuthenticationResponse(token, refreshToken)
+        var role = ""
+        var preferenceJson = ""
+        var privilegeJson = ""
+        if (isGuest(user)) {
+            guestRepository.findByGuestCode(user)?.let {
+                role = Role.guest.name
+                preferenceJson = it.preferenceJson
+                privilegeJson = it.privilegeJson
+            } ?: throw NotFound
+        } else {
+            userRepository.findByUserName(user)?.let {
+                role = it.role
+                preferenceJson = it.preferenceJson
+                privilegeJson = it.privilegeJson
+            } ?: throw NotFound
+        }
+        return AuthenticationResponse(token, refreshToken, role, preferenceJson, privilegeJson)
     }
 
     private fun isGuest(user: String) = user.startsWith(Constants.Guest.GUEST_PREFIX, false)

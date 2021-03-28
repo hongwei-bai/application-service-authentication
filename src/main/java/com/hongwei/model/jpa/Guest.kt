@@ -12,9 +12,6 @@ data class Guest(
         var expireTime: Long = System.currentTimeMillis(),
 
         @Column(nullable = false)
-        var description: String = "",
-
-        @Column(nullable = false)
         var guestCode: String = "",
 
         @Lob

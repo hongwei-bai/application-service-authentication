@@ -29,6 +29,6 @@ class GuestController {
 
     @PutMapping(path = ["/guest.do"])
     @ResponseBody
-    fun updateUser(guestCode: String, description: String?, expireTime: Long?, sign: String?): ResponseEntity<*> =
-            ResponseEntity.ok(guestAdminService.updateGuest(guestCode, description, expireTime))
+    fun updateUser(guestCode: String, expireTime: Long?, sign: String?): ResponseEntity<*> =
+            ResponseEntity.ok(guestAdminService.updateGuest(guestCode, expireTime))
 }

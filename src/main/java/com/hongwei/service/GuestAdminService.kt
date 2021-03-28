@@ -23,7 +23,6 @@ class GuestAdminService {
             guestCode = GuestCodeGenerator.generate(securityConfigurations.guestCodeLength)
         }
         val guest = Guest().apply {
-            this.description = description
             this.guestCode = guestCode
             this.expireTime = expireTime
         }
@@ -40,11 +39,10 @@ class GuestAdminService {
 
     fun getAllGuests(guestCode: String): List<Guest> = guestRepository.findAllGuest() ?: throw NotFound
 
-    fun updateGuest(guestCode: String, newDescription: String?, newExpireTime: Long?) {
+    fun updateGuest(guestCode: String, newExpireTime: Long?) {
         val guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
         guestRepository.save(guest.apply {
             newExpireTime?.let { this.expireTime = newExpireTime }
-            newDescription?.let { this.description = newDescription }
         })
     }
 }
