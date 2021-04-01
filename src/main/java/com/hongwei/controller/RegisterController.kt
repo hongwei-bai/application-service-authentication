@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/register")
-@CrossOrigin
 class RegisterController {
     @Autowired
     private lateinit var registerService: RegisterService

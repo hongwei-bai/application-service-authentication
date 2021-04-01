@@ -2,6 +2,7 @@ package com.hongwei.service
 
 import com.hongwei.constants.Constants.Guest.GUEST_PASS
 import com.hongwei.constants.Constants.Guest.GUEST_PREFIX
+import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.Unauthorized
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.UserRepository
@@ -24,10 +25,16 @@ class AuthenticateUserDetailsService : UserDetailsService {
     private lateinit var guestRepository: GuestRepository
 
     override fun loadUserByUsername(userName: String): UserDetails =
-            if (userName.startsWith(GUEST_PREFIX)) {
-                loadGuest(userName)
-            } else {
-                loadUser(userName)
+            when {
+                userName == PRE_FLIGHT_STUB_USER -> {
+                    User(PRE_FLIGHT_STUB_USER, "", emptyList())
+                }
+                userName.startsWith(GUEST_PREFIX) -> {
+                    loadGuest(userName)
+                }
+                else -> {
+                    loadUser(userName)
+                }
             }
 
     private fun loadUser(userName: String): UserDetails =

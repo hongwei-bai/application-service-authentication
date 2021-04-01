@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin
 class UserAdminController {
     @Autowired
     private lateinit var userAdminService: UserAdminService

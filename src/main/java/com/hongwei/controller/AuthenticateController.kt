@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/authenticate")
-@CrossOrigin
 class AuthenticateController {
     @Autowired
     private lateinit var authenticateService: AuthenticateService

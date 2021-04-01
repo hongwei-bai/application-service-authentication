@@ -1,10 +1,12 @@
 package com.hongwei.security.filters
 
+import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.SecurityConfigurations
 import com.hongwei.security.AccessTokenService
 import com.hongwei.service.AuthenticateUserDetailsService
 import org.apache.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -35,22 +37,33 @@ class JwtRequestFilter : OncePerRequestFilter() {
         val username: String
         val jwt: String
 
-        if (authorizationHeader != null && authorizationHeader.startsWith(securityConfigurations.authorizationBearer)) {
+        /*
+        The W3 spec for CORS preflight requests clearly states that user credentials should be excluded.
+        Reference[a]: https://stackoverflow.com/questions/15734031/why-does-the-preflight-options-request-of-an-authenticated-cors-request-work-in
+        Reference[b]: https://fetch.spec.whatwg.org/#cors-protocol-and-credentials
+         */
+        if (request.method == HttpMethod.OPTIONS.name) {
+            grantAccess(request)
+        } else if (authorizationHeader != null && authorizationHeader.startsWith(securityConfigurations.authorizationBearer)) {
             jwt = authorizationHeader.substring(securityConfigurations.authorizationBearer.length + 1)
             username = accessTokenService.extractUsername(jwt)
 
             if (SecurityContextHolder.getContext().authentication == null) {
+                grantAccess(request, username)
                 val userDetails = userDetailsService.loadUserByUsername(username)
-                if (accessTokenService.validateToken(jwt, userDetails)) {
-                    // Grant access
-                    val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.authorities)
-                    usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                    SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
-                }
             }
         }
 
         chain.doFilter(request, response)
+    }
+
+    private fun grantAccess(request: HttpServletRequest, userName: String = PRE_FLIGHT_STUB_USER) {
+        val userDetails = userDetailsService.loadUserByUsername(userName)
+
+        // Grant access
+        val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
+                userDetails, userDetails.password, userDetails.authorities)
+        usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+        SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
     }
 }

@@ -21,12 +21,12 @@ class TestController {
     fun index(): String {
         logger.debug("Hello debug")
 
-        return "Hello Hongwei! Welcome to $applicationDomain"
+        return "Hello Hongwei! Welcome to - $applicationDomain"
     }
 
     @RequestMapping(path = ["/testAuthorise.do"])
     @ResponseBody
     fun testAuthorise(): String {
-        return "Hello Hongwei! Authorisation test success! Your token is validated!"
+        return "Authorization test success! Your token is validated! - $applicationDomain"
     }
 }

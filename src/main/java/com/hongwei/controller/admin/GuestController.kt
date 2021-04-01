@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin
 class GuestController {
     @Autowired
     private lateinit var guestAdminService: GuestAdminService

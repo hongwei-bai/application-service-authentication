@@ -4,6 +4,7 @@ object Constants {
     object Security {
         const val SALT_CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+"
         const val AUTHENTICATE_PATH = "/authenticate"
+        const val PRE_FLIGHT_STUB_USER = ":pre-flight"
     }
 
     object Guest {
