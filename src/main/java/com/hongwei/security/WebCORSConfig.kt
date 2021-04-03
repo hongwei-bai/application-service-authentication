@@ -14,10 +14,7 @@ open class WebCORSConfig : WebMvcConfigurer {
     private lateinit var securityConfigurations: SecurityConfigurations
 
     override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**").apply {
-            securityConfigurations.corsAllowDomains.forEach {
-                allowedOrigins(it)
-            }
-        }
+        registry.addMapping("/**")
+                .allowedOrigins(*securityConfigurations.corsAllowDomains.toTypedArray())
     }
 }

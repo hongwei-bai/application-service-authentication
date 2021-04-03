@@ -6,6 +6,7 @@ import com.hongwei.security.AccessTokenService
 import com.hongwei.service.AuthenticateUserDetailsService
 import org.apache.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JwtRequestFilter : OncePerRequestFilter() {
-    private val logger = LogManager.getLogger(JwtRequestFilter::class.java)
+    private val _logger = LogManager.getLogger(JwtRequestFilter::class.java)
 
     @Autowired
     private lateinit var userDetailsService: AuthenticateUserDetailsService
@@ -50,7 +51,6 @@ class JwtRequestFilter : OncePerRequestFilter() {
 
             if (SecurityContextHolder.getContext().authentication == null) {
                 grantAccess(request, username)
-                val userDetails = userDetailsService.loadUserByUsername(username)
             }
         }
 

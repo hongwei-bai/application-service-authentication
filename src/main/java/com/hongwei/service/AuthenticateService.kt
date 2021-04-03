@@ -10,6 +10,7 @@ import com.hongwei.model.jpa.UserRepository
 import com.hongwei.security.AccessTokenService
 import com.hongwei.security.RefreshTokenService
 import com.hongwei.security.model.*
+import io.jsonwebtoken.ExpiredJwtException
 import org.apache.log4j.LogManager
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,28 +48,32 @@ class AuthenticateService {
     private lateinit var securityConfigurations: SecurityConfigurations
 
     fun authorise(authorisationRequest: AuthorisationRequest): AuthorisationResponse {
-        val username = accessTokenService.extractUsername(authorisationRequest.accessToken)
-        val userDetails = userDetailsService.loadUserByUsername(username)
-        if (accessTokenService.validateToken(authorisationRequest.accessToken, userDetails)) {
-            var role = ""
-            var preferenceJson = ""
-            if (isGuest(username)) {
-                role = Role.guest.toString()
-                guestRepository.findByGuestCode(username)?.let { guest ->
-                    preferenceJson = guest.preferenceJson
-                } ?: throw NotFound
-            } else {
-                userRepository.findByUserName(username)?.let { user ->
-                    role = user.role
-                    preferenceJson = user.preferenceJson
-                } ?: throw NotFound
+        try {
+            val username = accessTokenService.extractUsername(authorisationRequest.accessToken)
+            val userDetails = userDetailsService.loadUserByUsername(username)
+            if (accessTokenService.validateToken(authorisationRequest.accessToken, userDetails)) {
+                var role = ""
+                var preferenceJson = ""
+                if (isGuest(username)) {
+                    role = Role.guest.toString()
+                    guestRepository.findByGuestCode(username)?.let { guest ->
+                        preferenceJson = guest.preferenceJson
+                    } ?: throw NotFound
+                } else {
+                    userRepository.findByUserName(username)?.let { user ->
+                        role = user.role
+                        preferenceJson = user.preferenceJson
+                    } ?: throw NotFound
+                }
+                return AuthorisationResponse(
+                        validated = true,
+                        userName = username,
+                        role = role,
+                        preferenceJson = preferenceJson
+                )
             }
-            return AuthorisationResponse(
-                    validated = true,
-                    userName = username,
-                    role = role,
-                    preferenceJson = preferenceJson
-            )
+        } catch (e: ExpiredJwtException) {
+            throw Unauthorized
         }
         throw Unauthorized
     }
