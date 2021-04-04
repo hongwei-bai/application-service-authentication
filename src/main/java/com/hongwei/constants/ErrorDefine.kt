@@ -3,7 +3,6 @@ package com.hongwei.constants
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus
 
-
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 object BadRequest : RuntimeException()
 
@@ -13,8 +12,15 @@ object Forbidden : RuntimeException()
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 object NotFound : RuntimeException()
 
+/*
+https://github.com/spring-projects/spring-security/issues/5985
+For UNAUTHORIZED(401, HttpStatus.Series.CLIENT_ERROR, "Unauthorized"),
+To protect token passed in from request, there is no response body allowed by default.
+ */
 @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 object Unauthorized : RuntimeException()
+
+const val CAUSE_TOKEN_EXPIRED = "TOKEN_EXPIRED"
 
 @ResponseStatus(value = HttpStatus.NON_AUTHORITATIVE_INFORMATION)
 object NonAuthoritative : RuntimeException()
@@ -48,3 +54,6 @@ object NotImplemented : RuntimeException()
 
 @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
 object ServiceUnavailable : RuntimeException()
+
+@ResponseStatus(value = HttpStatus.NETWORK_AUTHENTICATION_REQUIRED)
+object NetworkAuthenticationRequired : RuntimeException()
