@@ -4,10 +4,9 @@ import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.SecurityConfigurations
 import com.hongwei.security.AccessTokenService
 import com.hongwei.service.AuthenticateUserDetailsService
-import jdk.jfr.ContentType
 import org.apache.log4j.LogManager
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpHeaders.*
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -71,12 +70,9 @@ class JwtRequestFilter : OncePerRequestFilter() {
     }
 
     private fun appendCORSHeaders(response: HttpServletResponse) {
-        response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE)
-        response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, true.toString())
-        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.type)
-        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA.type)
-        securityConfigurations.corsAllowDomains.forEach { domain ->
-            response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, domain)
-        }
+        response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, true.toString())
+        response.addHeader(ACCESS_CONTROL_ALLOW_HEADERS, "$CONTENT_TYPE,${securityConfigurations.authorizationHeader}")
+        response.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, securityConfigurations.corsAllowDomains.joinToString(","))
+        response.addHeader(CONTENT_TYPE,"${MediaType.APPLICATION_JSON.type},${MediaType.MULTIPART_FORM_DATA.type}")
     }
 }

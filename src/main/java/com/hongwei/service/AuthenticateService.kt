@@ -54,26 +54,33 @@ class AuthenticateService {
             if (accessTokenService.validateToken(authorisationRequest.accessToken, userDetails)) {
                 var role = ""
                 var preferenceJson = ""
+                var privilegeJson = ""
+                var validatedUntil = LONG_TERM
                 if (isGuest(username)) {
                     role = Role.guest.toString()
                     guestRepository.findByGuestCode(username)?.let { guest ->
                         preferenceJson = guest.preferenceJson
+                        privilegeJson = guest.privilegeJson
+                        validatedUntil = guest.expireTime
                     } ?: throw NotFound
                 } else {
                     userRepository.findByUserName(username)?.let { user ->
                         role = user.role
                         preferenceJson = user.preferenceJson
+                        privilegeJson = user.privilegeJson
                     } ?: throw NotFound
                 }
                 return AuthorisationResponse(
                         validated = true,
+                        validatedUntil = validatedUntil,
                         userName = username,
                         role = role,
-                        preferenceJson = preferenceJson
+                        preferenceJson = preferenceJson,
+                        privilegeJson = privilegeJson
                 )
             }
         } catch (e: ExpiredJwtException) {
-            throw Unauthorized
+            throw e
         }
         throw Unauthorized
     }

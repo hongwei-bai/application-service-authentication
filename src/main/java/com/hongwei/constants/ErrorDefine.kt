@@ -1,6 +1,10 @@
 package com.hongwei.constants
 
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -20,7 +24,14 @@ To protect token passed in from request, there is no response body allowed by de
 @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 object Unauthorized : RuntimeException()
 
-const val CAUSE_TOKEN_EXPIRED = "TOKEN_EXPIRED"
+@ControllerAdvice
+class ErrorDefine {
+
+    @ExceptionHandler(Unauthorized::class)
+    fun handle(): ResponseEntity<*> {
+        return ResponseEntity<Any>("token expired", HttpHeaders(), HttpStatus.UNAUTHORIZED)
+    }
+}
 
 @ResponseStatus(value = HttpStatus.NON_AUTHORITATIVE_INFORMATION)
 object NonAuthoritative : RuntimeException()
