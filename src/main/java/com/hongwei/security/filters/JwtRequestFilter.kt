@@ -71,12 +71,12 @@ class JwtRequestFilter : OncePerRequestFilter() {
     }
 
     private fun appendCORSHeaders(response: HttpServletResponse) {
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE)
-        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, true.toString())
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.type)
-        response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA.type)
+        response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE)
+        response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, true.toString())
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON.type)
+        response.addHeader(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA.type)
         securityConfigurations.corsAllowDomains.forEach { domain ->
-            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, domain)
+            response.addHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, domain)
         }
     }
 }
