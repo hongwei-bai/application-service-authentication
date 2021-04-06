@@ -18,6 +18,6 @@ open class WebCORSConfig : WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedHeaders(HttpHeaders.CONTENT_TYPE, securityConfigurations.authorizationHeader)
                 .allowCredentials(true)
-                .allowedOrigins(*securityConfigurations.corsAllowDomains.toTypedArray())
+                .allowedOrigins(securityConfigurations.corsAllowDomain)
     }
 }

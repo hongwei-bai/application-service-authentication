@@ -16,7 +16,7 @@ class JwtUtil {
         return extractClaim(token, secret, Function { obj: Claims -> obj.subject })
     }
 
-    private fun extractExpiration(token: String?, secret: String): Date {
+    fun extractExpiration(token: String?, secret: String): Date {
         return extractClaim(token, secret, Function { obj: Claims -> obj.expiration })
     }
 

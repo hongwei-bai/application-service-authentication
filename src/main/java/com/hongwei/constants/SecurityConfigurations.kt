@@ -11,7 +11,7 @@ open class SecurityConfigurations {
     lateinit var secretRefresh: String
     lateinit var authorizationHeader: String
     lateinit var authorizationBearer: String
-    lateinit var corsAllowDomains: List<String>
+    lateinit var corsAllowDomain: String
     var tokenExpirationMin by Delegates.notNull<Long>()
     var refreshTokenExpirationUserDay by Delegates.notNull<Long>()
     var refreshTokenExpirationGuestDay by Delegates.notNull<Long>()

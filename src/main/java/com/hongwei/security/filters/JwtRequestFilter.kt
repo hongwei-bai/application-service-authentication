@@ -72,7 +72,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
     private fun appendCORSHeaders(response: HttpServletResponse) {
         response.setHeader(ACCESS_CONTROL_ALLOW_CREDENTIALS, true.toString())
         response.addHeader(ACCESS_CONTROL_ALLOW_HEADERS, "$CONTENT_TYPE,${securityConfigurations.authorizationHeader}")
-        response.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, securityConfigurations.corsAllowDomains.joinToString(","))
+        response.addHeader(ACCESS_CONTROL_ALLOW_ORIGIN, securityConfigurations.corsAllowDomain)
         response.addHeader(CONTENT_TYPE,"${MediaType.APPLICATION_JSON.type},${MediaType.MULTIPART_FORM_DATA.type}")
     }
 }

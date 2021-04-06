@@ -5,6 +5,12 @@ object Constants {
         const val SALT_CHAR_POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()_+"
         const val AUTHENTICATE_PATH = "/authenticate"
         const val PRE_FLIGHT_STUB_USER = ":pre-flight"
+
+        object PublicAccess {
+            const val PUBLIC_ACCESS_STUB_USER = ":public-access"
+            const val PUBLIC_ACCESS_DEFAULT_EXPIRATION_DAY = 60L
+            const val PUBLIC_ACCESS_DEFAULT_SECRET = "public-access"
+        }
     }
 
     object Guest {
