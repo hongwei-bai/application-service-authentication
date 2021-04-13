@@ -5,8 +5,9 @@ enum class Module {
     KnowledgeGraph,
     Admin,
     ECommerce,
-    Album,
+    Photo,
     Resume,
     Todo,
-    SystemLogs;
+    SystemLogs,
+    UploadExercise;
 }
