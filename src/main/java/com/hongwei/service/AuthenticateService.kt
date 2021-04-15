@@ -1,5 +1,6 @@
 package com.hongwei.service
 
+import com.fasterxml.jackson.core.JsonParseException
 import com.hongwei.constants.*
 import com.hongwei.constants.Constants.Guest.GUEST_PASS
 import com.hongwei.constants.Constants.TimeSpan.DAY
@@ -11,6 +12,7 @@ import com.hongwei.security.AccessTokenService
 import com.hongwei.security.RefreshTokenService
 import com.hongwei.security.model.*
 import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.MalformedJwtException
 import org.apache.log4j.LogManager
 import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+import java.lang.Exception
 
 @Service
 class AuthenticateService {
@@ -81,6 +84,8 @@ class AuthenticateService {
             }
         } catch (e: ExpiredJwtException) {
             throw e
+        } catch (e: MalformedJwtException) {
+            throw Unauthorized
         }
         throw Unauthorized
     }
