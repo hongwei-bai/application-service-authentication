@@ -1,5 +1,7 @@
 # application-service-auth
 
+CI build state: [![CircleCI](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/master.svg?style=svg)](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/master)
+
 Authentication service application is providing a JWT based authentication for most of my service applications.
 
 It supports a wide range of level access control, from public access to a user level access, then when necessary, it allows each application has a much more finer way to control their own access.
