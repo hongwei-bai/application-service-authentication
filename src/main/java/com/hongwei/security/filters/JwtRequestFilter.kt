@@ -4,7 +4,7 @@ import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.SecurityConfigurations
 import com.hongwei.security.AccessTokenService
 import com.hongwei.service.AuthenticateUserDetailsService
-import org.apache.log4j.LogManager
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders.*
 import org.springframework.http.HttpMethod
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JwtRequestFilter : OncePerRequestFilter() {
-    private val _logger = LogManager.getLogger(JwtRequestFilter::class.java)
+    private val logger = LoggerFactory.getLogger(JwtRequestFilter::class.java)
 
     @Autowired
     private lateinit var userDetailsService: AuthenticateUserDetailsService

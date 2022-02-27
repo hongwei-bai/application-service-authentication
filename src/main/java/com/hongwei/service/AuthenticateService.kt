@@ -13,8 +13,8 @@ import com.hongwei.security.RefreshTokenService
 import com.hongwei.security.model.*
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
-import org.apache.log4j.LogManager
-import org.apache.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
@@ -22,11 +22,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
-import java.lang.Exception
 
 @Service
 class AuthenticateService {
-    private val logger: Logger = LogManager.getLogger(AuthenticateService::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(AuthenticateService::class.java)
 
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager

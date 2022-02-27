@@ -6,8 +6,8 @@ import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.Unauthorized
 import com.hongwei.model.jpa.GuestRepository
 import com.hongwei.model.jpa.UserRepository
-import org.apache.log4j.LogManager
-import org.apache.log4j.Logger
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AuthenticateUserDetailsService : UserDetailsService {
-    private val logger: Logger = LogManager.getLogger(AuthenticateUserDetailsService::class.java)
+    private val logger: Logger = LoggerFactory.getLogger(AuthenticateUserDetailsService::class.java)
 
     @Autowired
     private lateinit var userRepository: UserRepository

@@ -1,17 +1,18 @@
 package com.hongwei.controller.test
 
-import org.apache.log4j.LogManager
-import org.apache.log4j.Logger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
 
 @RestController
 @CrossOrigin
 class TestController {
-    private val logger: Logger = LogManager.getLogger(TestController::class.java)
+    var logger: Logger = LoggerFactory.getLogger(TestController::class.java)
 
     @Value("\${spring.jmx.default-domain}")
     private lateinit var applicationDomain: String
