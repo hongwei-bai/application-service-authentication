@@ -1,6 +1,6 @@
 # application-service-auth
 
-CI build state: [![CircleCI](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/master.svg?style=svg)](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/master)
+CI build state: [![CircleCI](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/main.svg?style=svg)](https://circleci.com/gh/hongwei-bai/application-service-authentication/tree/main)
 
 Authentication service application is providing a JWT based authentication for most of my service applications.
 
