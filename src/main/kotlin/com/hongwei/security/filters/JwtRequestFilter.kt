@@ -4,6 +4,10 @@ import com.hongwei.constants.Constants.Security.PRE_FLIGHT_STUB_USER
 import com.hongwei.constants.SecurityConfigurations
 import com.hongwei.security.AccessTokenService
 import com.hongwei.service.AuthenticateUserDetailsService
+import jakarta.servlet.FilterChain
+import jakarta.servlet.ServletException
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders.*
@@ -15,10 +19,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
-import javax.servlet.FilterChain
-import javax.servlet.ServletException
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 @Component
 class JwtRequestFilter : OncePerRequestFilter() {
@@ -44,7 +44,7 @@ class JwtRequestFilter : OncePerRequestFilter() {
         Reference[a]: https://stackoverflow.com/questions/15734031/why-does-the-preflight-options-request-of-an-authenticated-cors-request-work-in
         Reference[b]: https://fetch.spec.whatwg.org/#cors-protocol-and-credentials
          */
-        if (request.method == HttpMethod.OPTIONS.name) {
+        if (request.method == HttpMethod.OPTIONS.name()) {
             grantAccess(request)
         } else if (authorizationHeader != null && authorizationHeader.startsWith(securityConfigurations.authorizationBearer)) {
             jwt = authorizationHeader.substring(securityConfigurations.authorizationBearer.length + 1)

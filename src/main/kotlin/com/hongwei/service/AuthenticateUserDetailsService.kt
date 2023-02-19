@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class AuthenticateUserDetailsService : UserDetailsService {
@@ -39,7 +40,7 @@ class AuthenticateUserDetailsService : UserDetailsService {
 
     private fun loadUser(userName: String): UserDetails =
             userRepository.findByUserName(userName)?.run {
-                User(userName, credential.toLowerCase(), emptyList())
+                User(userName, credential.lowercase(Locale.getDefault()), emptyList())
             } ?: throw Unauthorized
 
     private fun loadGuest(user: String): UserDetails =

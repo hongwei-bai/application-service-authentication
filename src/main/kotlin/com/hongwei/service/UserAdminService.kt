@@ -63,10 +63,10 @@ class UserAdminService {
         }
 
         val list = mutableListOf<User>()
-        userRepository.findUsersByRole(Role.admin.name)?.let {
+        userRepository.findUsersByRole(Role.admin.name).let {
             list.addAll(it)
         }
-        userRepository.findUsersByRole(Role.user.name)?.let {
+        userRepository.findUsersByRole(Role.user.name).let {
             list.addAll(it)
         }
         return list

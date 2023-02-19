@@ -1,11 +1,15 @@
 package com.hongwei.model.jpa
 
 import com.hongwei.model.contract.Role
-import javax.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.Lob
+import org.springframework.data.annotation.Id
 
 @Entity
 data class User(
-        @Id
+        @jakarta.persistence.Id @Id
         @GeneratedValue
         var id: Long? = null,
 
