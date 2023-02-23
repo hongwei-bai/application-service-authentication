@@ -21,11 +21,11 @@ jobs:
       # Use mvn clean and package as the standard maven build phase
       - run:
           name: Build
-          command: .\gradlew.bat clean
+          command: ~/project/gradlew clean
       # Then run your tests!
       - run:
           name: Test
-          command: .\gradlew.bat test
+          command: ~/project/gradlew test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
