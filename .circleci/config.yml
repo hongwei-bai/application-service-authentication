@@ -23,6 +23,9 @@ jobs:
           name: Prepare
           command: chmod 777 ./gradlew
       - run:
+          name: Prepare2
+          command: cd ~/project
+      - run:
           name: Build
           command: ./gradlew clean
       # Then run your tests!
