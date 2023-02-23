@@ -5,9 +5,8 @@ import javax.crypto.spec.SecretKeySpec
 
 object HMAC {
     @JvmStatic
-    fun calcHmacSha256(secretKey: ByteArray?, message: ByteArray?): ByteArray? {
-        var hmacSha256: ByteArray? = null
-        hmacSha256 = try {
+    fun calcHmacSha256(secretKey: ByteArray?, message: ByteArray?): ByteArray {
+        val hmacSha256: ByteArray = try {
             val mac = Mac.getInstance("HmacSHA256")
             val secretKeySpec = SecretKeySpec(secretKey, "HmacSHA256")
             mac.init(secretKeySpec)

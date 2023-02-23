@@ -14,7 +14,7 @@ class RegisterService {
 
     fun registerUser(userName: String, passwordHash: String) {
         userRepository.findByUserName(userName)?.let {
-            return throw Conflict
+            throw Conflict
         }
         val user = User().apply {
             this.userName = userName

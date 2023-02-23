@@ -1,6 +1,5 @@
 package com.hongwei.service
 
-import com.fasterxml.jackson.core.JsonParseException
 import com.hongwei.constants.*
 import com.hongwei.constants.Constants.Guest.GUEST_PASS
 import com.hongwei.constants.Constants.TimeSpan.DAY
@@ -116,7 +115,7 @@ class AuthenticateService {
             authenticationManager.authenticate(
                     UsernamePasswordAuthenticationToken(
                             user,
-                            passwordHash.toLowerCase()
+                            passwordHash.lowercase()
                     )
             )
         } catch (e: BadCredentialsException) {

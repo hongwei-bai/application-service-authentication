@@ -37,7 +37,7 @@ class GuestAdminService {
 
     fun getGuest(guestCode: String): Guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
 
-    fun getAllGuests(guestCode: String): List<Guest> = guestRepository.findAllGuest() ?: throw NotFound
+    fun getAllGuests(guestCode: String): List<Guest> = guestRepository.findAllGuest()
 
     fun updateGuest(guestCode: String, newExpireTime: Long?) {
         val guest = guestRepository.findByGuestCode(guestCode) ?: throw NotFound
