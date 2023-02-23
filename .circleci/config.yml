@@ -20,6 +20,9 @@ jobs:
       - checkout
       # Use mvn clean and package as the standard maven build phase
       - run:
+          name: Prepare
+          command: chmod 777 ./gradlew
+      - run:
           name: Build
           command: ./gradlew clean
       # Then run your tests!
